@@ -25,11 +25,6 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
-import DashboardMenu from './templates/DashboardMenu.vue';
-import LoginView from './templates/LoginView.vue';
-import StockView from './templates/StockView.vue';
-import TrackingView from './templates/TrackingView.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faArrowLeft, faArrowRight, faBan, faBox, faBoxOpen, faBuilding,
@@ -40,6 +35,11 @@ import {
   faTruckFast, faUniversity
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { onMounted, reactive, ref } from 'vue';
+import DashboardMenu from './templates/DashboardMenu.vue';
+import LoginView from './templates/LoginView.vue';
+import StockView from './templates/StockView.vue';
+import TrackingView from './templates/TrackingView.vue';
 library.add(
   faUniversity, faCircleExclamation, faEnvelope, faLock, faSpinner, faArrowRight,
   faRightFromBracket, faBox, faTruck, faFolderOpen, faTruckFast, faArrowLeft, faPlus,
@@ -129,61 +129,75 @@ onMounted(() => {
 .zoom-in-leave-active {
   transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 .zoom-in-enter-from {
   opacity: 0;
   transform: scale(0.9);
 }
+
 .zoom-in-enter-to {
   opacity: 1;
   transform: scale(1);
 }
+
 .zoom-in-leave-from {
   opacity: 1;
   transform: scale(1);
 }
+
 .zoom-in-leave-to {
   opacity: 0;
   transform: scale(1.1);
 }
+
 .zoom-out-enter-active,
 .zoom-out-leave-active {
   transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 .zoom-out-enter-from {
   opacity: 0;
   transform: scale(1.1);
 }
+
 .zoom-out-enter-to {
   opacity: 1;
   transform: scale(1);
 }
+
 .zoom-out-leave-from {
   opacity: 1;
   transform: scale(1);
 }
+
 .zoom-out-leave-to {
   opacity: 0;
   transform: scale(0.9);
   z-index: 50;
 }
+
 .slide-left-enter-active,
 .slide-left-leave-active,
 .slide-right-enter-active,
 .slide-right-leave-active {
   transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
+
 .slide-left-enter-from {
   opacity: 0;
   transform: translateX(100%);
 }
+
 .slide-left-leave-to {
   opacity: 0.5;
   transform: translateX(-25%);
 }
+
 .slide-right-enter-from {
   opacity: 0.5;
   transform: translateX(-25%);
 }
+
 .slide-right-leave-to {
   opacity: 0;
   transform: translateX(100%);
