@@ -2,8 +2,6 @@
   <div class="min-h-screen flex items-center justify-center p-6 font-sans"
     :style="{ backgroundImage: `url(${bgImage})` }">
     <div class="w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden border border-gray-200">
-
-      <!-- Header Login -->
       <div class="bg-blue-900 p-8 text-center">
         <div
           class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white text-blue-900 mb-4 shadow-lg">
@@ -12,8 +10,6 @@
         <h1 class="text-2xl font-bold text-white tracking-wide">SITTA UT</h1>
         <p class="text-blue-200 text-xs mt-1">Sistem Informasi Tiras & Transaksi</p>
       </div>
-
-      <!-- Form Login -->
       <div class="p-8">
         <form @submit.prevent="handleSubmit" class="space-y-5">
           <div v-if="errorMsg"
@@ -21,7 +17,6 @@
             <font-awesome-icon icon="circle-exclamation" />
             {{ errorMsg }}
           </div>
-
           <div>
             <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Email</label>
             <div class="relative">
@@ -33,7 +28,6 @@
                 required>
             </div>
           </div>
-
           <div>
             <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Password</label>
             <div class="relative">
@@ -45,7 +39,6 @@
                 required>
             </div>
           </div>
-
           <button type="submit"
             class="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 rounded transform active:scale-95 transition flex justify-center gap-2 items-center"
             :disabled="isLoading">
@@ -69,14 +62,11 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref } from 'vue';
 import cloudBg from '../assets/img/cloud.jpg';
-
 const props = defineProps(['isLoading', 'errorMsg']);
 const emit = defineEmits(['login']);
-
 const email = ref('');
 const password = ref('');
 const bgImage = cloudBg;
-
 const handleSubmit = () => {
   emit('login', { email: email.value, password: password.value });
 };
