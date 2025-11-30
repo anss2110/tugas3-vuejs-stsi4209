@@ -1,13 +1,12 @@
 <template>
   <div class="max-w-6xl mx-auto">
 
-    <!-- SECTION FILTER -->
     <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
       <h2 class="text-lg font-semibold mb-4 text-gray-700 flex items-center gap-2">
         <font-awesome-icon icon="filter" /> Filter & Sort Data
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <!-- Filter UT-Daerah -->
+
         <div>
           <label class="block text-xs font-bold text-gray-500 uppercase mb-1">UT-Daerah</label>
           <select v-model="filterUpbjj"
@@ -17,7 +16,6 @@
           </select>
         </div>
 
-        <!-- Filter Kategori (Dependent) -->
         <div>
           <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Kategori MK</label>
           <select v-model="filterKategori" :disabled="!filterUpbjj"
@@ -27,7 +25,6 @@
           </select>
         </div>
 
-        <!-- Sort -->
         <div>
           <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Urutkan</label>
           <select v-model="sortBy" class="w-full p-2 border border-gray-300 rounded">
@@ -37,7 +34,6 @@
           </select>
         </div>
 
-        <!-- Reset & Checkbox -->
         <div class="flex flex-col justify-end space-y-2">
           <label class="flex items-center space-x-2 cursor-pointer select-none">
             <input type="checkbox" v-model="filterWarning" class="form-checkbox h-4 w-4 text-blue-600 rounded" />
@@ -50,7 +46,6 @@
       </div>
     </div>
 
-    <!-- SECTION TABEL -->
     <div class="bg-white rounded-lg shadow overflow-hidden border border-gray-200 mb-10">
       <table class="w-full text-left border-collapse">
         <thead class="bg-gray-100 text-gray-600 uppercase text-xs font-bold">
@@ -68,36 +63,29 @@
         <tbody class="text-sm divide-y divide-gray-100">
           <tr v-for="item in processedStok" :key="item.kode" class="hover:bg-blue-50 transition group">
 
-            <!-- Kolom Kode & Judul -->
             <td class="p-4">
               <div class="font-bold text-gray-800">{{ item.judul }}</div>
               <div class="text-xs text-gray-500 font-mono">{{ item.kode }} | {{ item.upbjj }}</div>
             </td>
 
-            <!-- Kolom Kategori -->
             <td class="p-4 text-gray-600">
               <span class="bg-gray-200 px-2 py-1 rounded text-xs">{{ item.kategori }}</span>
             </td>
 
-            <!-- Kolom Lokasi -->
             <td class="p-4 text-gray-600 font-mono">{{ item.lokasiRak }}</td>
 
-            <!-- Kolom Harga (Formatting Rp) -->
             <td class="p-4 text-right font-medium text-gray-700">
               {{ formatRupiah(item.harga) }}
             </td>
 
-            <!-- Kolom Stok (Formatting buah) -->
             <td class="p-4 text-center font-bold" :class="item.qty === 0 ? 'text-red-600' : 'text-gray-800'">
               {{ item.qty }} <span class="text-xs font-normal text-gray-400">buah</span>
             </td>
 
-            <!-- Kolom Safety (Formatting buah) -->
             <td class="p-4 text-center text-gray-500">
               {{ item.safety }} <span class="text-xs font-normal text-gray-400">buah</span>
             </td>
 
-            <!-- Kolom Status + Tooltip -->
             <td class="p-4 text-center relative">
               <div class="relative inline-block group/tooltip cursor-help">
                 <span :class="getStatusClass(item)"
@@ -106,13 +94,10 @@
                   {{ getStatusLabel(item) }}
                 </span>
 
-                <!-- Tooltip Hover (Tampil jika ada catatanHTML) -->
                 <div v-if="item.catatanHTML"
                   class="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-3 bg-gray-800 text-white text-xs rounded shadow-xl opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200 text-left pointer-events-none">
                   <div class="font-bold border-b border-gray-600 pb-1 mb-1 text-yellow-400">Catatan:</div>
-                  <!-- Render HTML dari JSON -->
                   <div v-html="item.catatanHTML"></div>
-                  <!-- Arrow Tooltip -->
                   <div
                     class="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-gray-800">
                   </div>
@@ -120,7 +105,6 @@
               </div>
             </td>
 
-            <!-- Kolom Aksi -->
             <td class="p-4 text-center">
               <div class="flex items-center justify-center gap-2">
                 <button @click="openModal('edit', item)"
@@ -135,7 +119,6 @@
             </td>
           </tr>
 
-          <!-- Empty State -->
           <tr v-if="processedStok.length === 0">
             <td colspan="8" class="p-10 text-center text-gray-500 flex-col justify-center items-center">
               <font-awesome-icon icon="box-open" class="text-4xl mb-2 text-gray-300" />
@@ -146,9 +129,6 @@
       </table>
     </div>
 
-    <!-- ============================================ -->
-    <!-- MODAL 1: FORM INPUT (Create / Update)        -->
-    <!-- ============================================ -->
     <div v-if="showModal"
       class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
       <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden animate-fade-in">
@@ -166,52 +146,43 @@
         <div class="p-6">
           <form @submit.prevent="saveData">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- Kode -->
               <div>
                 <label class="label-text">Kode MK</label>
                 <input v-model="formData.kode" :disabled="formMode === 'edit'" placeholder="cth: MK001"
                   class="input-text disabled:bg-gray-100" required />
               </div>
-              <!-- Judul -->
               <div>
                 <label class="label-text">Nama Mata Kuliah</label>
                 <input v-model="formData.judul" placeholder="cth: Pemrograman Web" class="input-text" required />
               </div>
-              <!-- Kategori -->
               <div>
                 <label class="label-text">Kategori</label>
                 <select v-model="formData.kategori" class="input-text">
                   <option v-for="k in kategoriList" :key="k" :value="k">{{ k }}</option>
                 </select>
               </div>
-              <!-- UPBJJ -->
               <div>
                 <label class="label-text">UT-Daerah</label>
                 <select v-model="formData.upbjj" class="input-text">
                   <option v-for="u in upbjjList" :key="u" :value="u">{{ u }}</option>
                 </select>
               </div>
-              <!-- Lokasi -->
               <div>
                 <label class="label-text">Lokasi Rak</label>
                 <input v-model="formData.lokasiRak" placeholder="cth: R1-A1" class="input-text" />
               </div>
-              <!-- Harga -->
               <div>
                 <label class="label-text">Harga (Rp)</label>
                 <input type="number" v-model.number="formData.harga" class="input-text" />
               </div>
-              <!-- Qty -->
               <div>
                 <label class="label-text">Jumlah Stok (Buah)</label>
                 <input type="number" v-model.number="formData.qty" class="input-text" required />
               </div>
-              <!-- Safety -->
               <div>
                 <label class="label-text">Safety Stock (Buah)</label>
                 <input type="number" v-model.number="formData.safety" class="input-text" />
               </div>
-              <!-- Catatan -->
               <div class="md:col-span-2">
                 <label class="label-text">Catatan (HTML Supported)</label>
                 <input v-model="formData.catatanHTML" placeholder="Contoh: <b>Edisi Baru</b>" class="input-text" />
@@ -219,7 +190,6 @@
               </div>
             </div>
 
-            <!-- Footer Modal -->
             <div class="mt-8 flex justify-end gap-3 border-t pt-4">
               <button type="button" @click="closeModal"
                 class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded font-bold transition">Batal</button>
@@ -233,9 +203,6 @@
       </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- MODAL 2: KONFIRMASI DELETE                   -->
-    <!-- ============================================ -->
     <div v-if="showDeleteModal"
       class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
       <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden text-center p-6">
@@ -283,34 +250,28 @@ library.add(
   faCheckCircle, faExclamationCircle, faBan
 );
 
-// PROPS & EMITS
 const props = defineProps(['initialData', 'upbjjList', 'kategoriList']);
 const emit = defineEmits(['back', 'logout']);
 
-// STATE UTAMA
 const localStok = ref([]);
 const filterUpbjj = ref("");
 const filterKategori = ref("");
 const filterWarning = ref(false);
 const sortBy = ref("judul");
 
-// STATE MODAL
 const showModal = ref(false);
-const formMode = ref('create'); // 'create' | 'edit'
+const formMode = ref('create');
 const showDeleteModal = ref(false);
 const itemToDelete = ref(null);
 
-// STATE FORM
 const formData = reactive({
   kode: "", judul: "", kategori: "", upbjj: "", lokasiRak: "", qty: 0, safety: 0, harga: 0, catatanHTML: ""
 });
 
-// SINKRONISASI DATA AWAL
 watch(() => props.initialData, (newVal) => {
   if (newVal) localStok.value = JSON.parse(JSON.stringify(newVal));
 }, { immediate: true });
 
-// WATCHER FILTER DEPENDENT
 watch(filterUpbjj, () => {
   filterKategori.value = "";
 });
@@ -345,14 +306,12 @@ const processedStok = computed(() => {
   return result;
 });
 
-// METHODS HELPER FORMATTING
 const formatRupiah = (val) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(val || 0);
 
-// METHODS STATUS LOGIC
 const getStatusClass = (item) => {
-  if (item.qty === 0) return "bg-red-50 text-red-600 border-red-200"; // Kosong
-  if (item.qty < item.safety) return "bg-orange-50 text-orange-600 border-orange-200"; // Menipis
-  return "bg-green-50 text-green-600 border-green-200"; // Aman
+  if (item.qty === 0) return "bg-red-50 text-red-600 border-red-200";
+  if (item.qty < item.safety) return "bg-orange-50 text-orange-600 border-orange-200";
+  return "bg-green-50 text-green-600 border-green-200";
 };
 
 const getStatusLabel = (item) => {
